@@ -1,0 +1,26 @@
+{
+  "name": "mevnbackend",
+  "version": "1.0.0",
+  "description": "back end para MEVN",
+  "main": "server",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Osmel Guarepo",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "express-validator": "^5.3.1",
+    "jsonwebtoken": "^8.4.0",
+    "mongoose": "^5.4.3",
+    "multer": "^1.4.1",
+    "nodemailer": "^5.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}
