@@ -7,7 +7,7 @@
         </div>
         <div class="bodyGrid">
             <div class="bodyContainer">
-                <form v-on:submit.prevent="crear">
+                <form v-on:submit.prevent="userLogin">
                     <p class="bodyContainerTitle">Log In</p>
                     <input type="text" class="bodyContainerInput" v-model="usuario.email" placeholder="email"  v-validate="'required|email'" name="email"><br>
                     <span class="errors">{{ errors.first('email') }}</span><br>
@@ -40,9 +40,6 @@ export default {
     }
   },
   methods:{
-    get() {
-      return this.$store.state.message;
-    },
     loginValidation() {
         this.$validator.validateAll().then(res=>{ 
             if(res) {
@@ -170,14 +167,14 @@ export default {
             }
         })
     },
-    crear(){
+    userLogin(){
       this.$validator.validateAll().then(res=>{ 
           if(res) {
             const usuario = {
               email:this.usuario.email,
               password:this.usuario.password
             }
-            this.$store.dispatch('crear',usuario);
+            this.$store.dispatch('userLogin',usuario);
           } else {
             const toast = this.$swal.mixin({
             toast: true,

@@ -10,7 +10,7 @@
         <div class="bodyGrid">
             <div class="bodyContainer">   
                 <p class="bodyContainerTitle">¿Forgot your password?</p>
-                <form @submit.prevent="resetEmail">
+                <form @submit.prevent="userEmailForgot">
                     <input type="text" class="bodyContainerInput" v-model="emailTo" placeholder="Type your email">
                     <button class="bodyContainerButtonSubmit">Send</button>
                 </form>            
@@ -27,40 +27,9 @@ export default {
         }
     },
     methods:{
-        resetEmail(){
-            axios.post('http://localhost:3000/forgot',
-                {
-                    emailTo:this.emailTo,
-                })
-                .then(response =>{
-                    if(response.data.rs === 'emailEnviado'){
-                        const toast = this.$swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000
-                        });
-                        toast({
-                        type: 'success',
-                        title: 'User NOT Confirmed, check your email'
-                        })
-                        this.$router.push('/home');
-                    }else if (response.data.rs === 'emailNoExiste'){
-                        const toast = this.$swal.mixin({
-                        toast: true,
-                        position: 'top',
-                        showConfirmButton: false,
-                        timer: 3000
-                        });
-                        toast({
-                        type: 'error',
-                        title: 'Email Doesnt exist'
-                        })
-                    }
-                })
-                .catch(error=>{
-                    alert(error);
-                })  
+        userEmailForgot(){
+            emailTo:this.usuario.emailTo,
+            this.$store.dispatch('userEmailForgot',emailTo);
         }
     }
 }

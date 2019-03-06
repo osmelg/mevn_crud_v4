@@ -31,20 +31,20 @@
 /* eslint-disable */
 import axios from "axios";
 import router from "../router";
-
 export default {
     data(){
         return{
-            nombre:'',
-            email:'', 
-            password:'',
-            nombreUsuario:'',
-            fotoPerfil:null
+            usuario:{
+                nombre:'',
+                email:'',
+                password:'',
+                fotoPerfil:null
+            }            
         }
     },
     methods:{
         onFileSelected(event){
-            this.fotoPerfil = event.target.files[0];
+            this.usuario.fotoPerfil = event.target.files[0];
         },
         crearUsuario(){
             this.$validator.validateAll().then(res=>{
@@ -124,6 +124,30 @@ export default {
                             title: 'Verify Inputs'
                             })
                     }
+            })
+        },
+        usuarioSignUp(){
+            this.$validator.validateAll().then(res=>{
+                if (res){
+                    const usuario = {
+                        nombre:this.usuario.nombre,
+                        email:this.usuario.email,
+                        password:this.usuario.password,
+                        fotoPerfil:this.usuario.fotoPerfil
+                    }
+                    this.$store.dispatch('usuarioSignUp',usuario);
+                }else{
+                    const toast = this.$swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000
+                    });
+                    toast({
+                    type: 'error',
+                    title: 'Verify Inputs'
+                    })                    
+                }
             })
         }
     }
