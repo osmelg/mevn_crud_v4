@@ -4,7 +4,7 @@ import router from './router'
 import VeeValidate from 'vee-validate';
 import { Validator } from 'vee-validate';
 import VueSweetalert2 from 'vue-sweetalert2';
-import store from './store'
+import {store} from '../store/store.js';
 
 Vue.config.productionTip = false
 // Middlewares

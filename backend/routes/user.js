@@ -11,7 +11,7 @@ const express = require('express');
 const router = express.Router();
 // AUTENTICACION DE USUARIOS
     // ACCESO
-        router.post('/login',checkAccount,(req,res)=>{
+        router.post('/login',(req,res)=>{
             // 0. Verificar datos del cliente
             req.check('email','emailError').notEmpty().isEmail();
             req.check('password','passwordError').notEmpty().isLength({min:3});

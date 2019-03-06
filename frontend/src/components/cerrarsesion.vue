@@ -29,5 +29,5 @@ export default {
 </script>
 <style>
 *                                           {margin: 0; padding: 0;}
-.bodyContainerButton                        {height: 3em; width: 3em; cursor: pointer; background: url(../assets/icons/login.svg);}
+.bodyContainerButton                        {height: 5em; width: 5em; cursor: pointer; background: url(../assets/icons/login.svg);}
 </style>

@@ -7,13 +7,15 @@
         </div>
         <div class="bodyGrid">
             <div class="bodyContainer">
-                <form v-on:submit.prevent="postUsuario">
+                <form v-on:submit.prevent="crear">
                     <p class="bodyContainerTitle">Log In</p>
-                    <input type="text" class="bodyContainerInput" v-model="email" placeholder="email" v-validate="'required|email'" name="email"><br>
+                    <input type="text" class="bodyContainerInput" v-model="usuario.email" placeholder="email"  v-validate="'required|email'" name="email"><br>
                     <span class="errors">{{ errors.first('email') }}</span><br>
-                    <input type="password" class="bodyContainerInput" v-model="password" placeholder="password" v-validate="'required|alpha_num:3'" name="password"><br>
+                    <input type="password" class="bodyContainerInput" v-model="usuario.password" placeholder="password"  v-validate="'required|alpha_num:3'" name="password"><br>
                     <span class="errors">{{ errors.first('password') }}</span><br>
-                    <button type="submit" class="bodyContainerButtonSubmit"><img type='submit' src="../assets/icons/login.svg" class="bodyContainerButton"></button>
+                    <button type="submit" class="bodyContainerButtonSubmit">
+                      <img type='submit' src="../assets/icons/login.svg" class="bodyContainerButtonImage">
+                    </button>
                 </form>
                     <router-link to='/forgot' class="bodyForgot">forgot pw?</router-link>
             </div>
@@ -27,135 +29,170 @@
 </template>
 <script>
 /* eslint-disable */
-import axios from "axios";
-import router from "../router";
+import {mapActions} from 'vuex'
 export default {
-    data(){
-        return{
-            email:'',
-            password:'',
-        }
-    },
-    methods:{
-        postUsuario(){
-            this.$validator.validateAll().then(res=>{
-                if(res) {
-                    axios
-                    .post('http://localhost:3000/login',{
-                        email:this.email,
-                        password:this.password
-                    })
-                    .then(response =>{
-                        if(response.data.rs === 'usuarioNoConfirmado'){
-                            const toast = this.$swal.mixin({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 3000
-                                });
-                                toast({
-                                type: 'success',
-                                title: 'User NOT Confirmed, check your email'
-                                })
-                        }else if(response.data.rs === 'usuarioLogeado'){
-                            const toast = this.$swal.mixin({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 3000
-                                });
-                                toast({
-                                type: 'success',
-                                title: 'Logged In'
-                                })
-                            localStorage.setItem('token',response.data.token);
-                            this.$router.push('/dashboard');
-                        }
-                    })
-                    .catch(error=>{
-                        if(error.response.data.rs === 'emailIncorrecto'){
-                            const toast = this.$swal.mixin({
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 3000
-                            });
-                            toast({
-                            type: 'error',
-                            title: 'Email Incorrect'
-                            })
-                        }else if (error.response.data.rs === 'errorIncriptacion'){
-                            const toast = this.$swal.mixin({
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 3000
-                            });
-                            toast({
-                            type: 'error',
-                            title: 'Encrypt Error'
-                            })
-                        }else if (error.response.data.rs === 'passwordIncorrecto'){
-                            const toast = this.$swal.mixin({
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 3000
-                            });
-                            toast({
-                            type: 'error',
-                            title: 'Password Incorrect'
-                            })
-                        }else if (error.response.data.rs === 'emailError'){
-                            const toast = this.$swal.mixin({
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 3000
-                            });
-                            toast({
-                            type: 'error',
-                            title: 'Verify Email input'
-                            })
-                        }else if (error.response.data.rs === 'passwordError'){
-                            const toast = this.$swal.mixin({
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 3000
-                            });
-                            toast({
-                            type: 'error',
-                            title: 'Verify Password input'
-                            })
-                        }else{
-                            const toast = this.$swal.mixin({
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 3000
-                            });
-                            toast({
-                            type: 'error',
-                            title: `Error,try again`
-                            })
-                        }
-                    })                    
-                } else {
-                    const toast = this.$swal.mixin({
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000
-                    });
-                    toast({
-                    type: 'error',
-                    title: 'Verify Inputs'
-                    })
-                }
-            })
-        }
+  data () {
+    return {
+      usuario:{
+        email:'',
+        password:''
+      }
     }
+  },
+  methods:{
+    get() {
+      return this.$store.state.message;
+    },
+    loginValidation() {
+        this.$validator.validateAll().then(res=>{ 
+            if(res) {
+                alert('Form successfully submitted!')
+            } else {
+                alert('Please correct all error!')
+            }
+        })
+    },
+    loginValidation(){
+        this.$validator.validateAll().then(res=>{
+            if(res) {
+                axios
+                .post('http://localhost:3000/login',{
+                    email:this.email,
+                    password:this.password
+                })
+                .then(response =>{
+                    if(response.data.rs === 'usuarioNoConfirmado'){
+                        const toast = this.$swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                            });
+                            toast({
+                            type: 'success',
+                            title: 'User NOT Confirmed, check your email'
+                            })
+                    }else if(response.data.rs === 'usuarioLogeado'){
+                        const toast = this.$swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                            });
+                            toast({
+                            type: 'success',
+                            title: 'Logged In'
+                            })
+                        localStorage.setItem('token',response.data.token);
+                        this.$router.push('/dashboard');
+                    }
+                })
+                .catch(error=>{
+                    if(error.response.data.rs === 'emailIncorrecto'){
+                        const toast = this.$swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000
+                        });
+                        toast({
+                        type: 'error',
+                        title: 'Email Incorrect'
+                        })
+                    }else if (error.response.data.rs === 'errorIncriptacion'){
+                        const toast = this.$swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000
+                        });
+                        toast({
+                        type: 'error',
+                        title: 'Encrypt Error'
+                        })
+                    }else if (error.response.data.rs === 'passwordIncorrecto'){
+                        const toast = this.$swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000
+                        });
+                        toast({
+                        type: 'error',
+                        title: 'Password Incorrect'
+                        })
+                    }else if (error.response.data.rs === 'emailError'){
+                        const toast = this.$swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000
+                        });
+                        toast({
+                        type: 'error',
+                        title: 'Verify Email input'
+                        })
+                    }else if (error.response.data.rs === 'passwordError'){
+                        const toast = this.$swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000
+                        });
+                        toast({
+                        type: 'error',
+                        title: 'Verify Password input'
+                        })
+                    }else{
+                        const toast = this.$swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000
+                        });
+                        toast({
+                        type: 'error',
+                        title: `Error,try again`
+                        })
+                    }
+                })                    
+            } else {
+                const toast = this.$swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000
+                });
+                toast({
+                type: 'error',
+                title: 'Verify Inputs'
+                })
+            }
+        })
+    },
+    crear(){
+      this.$validator.validateAll().then(res=>{ 
+          if(res) {
+            const usuario = {
+              email:this.usuario.email,
+              password:this.usuario.password
+            }
+            this.$store.dispatch('crear',usuario);
+          } else {
+            const toast = this.$swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000
+            });
+            toast({
+            type: 'error',
+            title: 'Verify Inputs'
+            })
+          }
+      })
+    }
+  }
 }
 </script>
 <style scoped>
@@ -173,11 +210,12 @@ export default {
       .bodyGrid                                 {height: 80vh; display: grid; grid-area: bodyGrid;}
         .bodyContainer                          {height: 100%; text-align: center; display: flex; justify-content: center; align-items: center; flex-direction: column;}
           .bodyContainerTitle                   {color: #fff; font-size: 3.6em; font-family: two;}
-          .bodyContainerInput                   {width:50vw; height: 3em; text-align: center; font-size: 1.1em; padding: 1em; margin-top: 1em; border: 1px solid #B1B1B1; border-radius: 20px;}
-          .bodyContainerButton                  {height: 5em; text-align: center; margin-top: 1em; cursor: pointer;}
-          .bodyContainerButtonSubmit            {border: none; cursor: pointer; background: url(../assets/icons/login.svg);}
+          .bodyContainerInput                   {width: 40vw; height: 3em; text-align: center; font-size: 1.1em; padding: 1em; margin-top: 1em; border: 1px solid #B1B1B1; border-radius: 20px;}
+          .bodyContainerButtonImage             {height: 5em; text-align: center; margin-top: .5em; cursor: pointer;}
+          .bodyContainerButtonSubmit            {border: none; cursor: pointer; background: url(../assets/icons/login.svg); margin-bottom: 1em;}
           .bodyForgot                           {color: white;}
       .footGrid                                 {height: 5vh; display: grid; grid-area: footGrid;}
         .footContainer                          {height: 100%; display: grid; justify-items: center; align-items: center;}
-          .footContainerTitle                   {color: #ffffff; font-size: 2em; font-family:dos;}          
+          .footContainerTitle                   {color: #ffffff; font-size: 2em; font-family:dos;}
+    @media screen and (max-width: 767px)        {.bodyContainerInput {width: 70vw;}}
 </style>

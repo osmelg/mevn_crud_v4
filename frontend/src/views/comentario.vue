@@ -126,6 +126,6 @@ export default {
                 .bodyContainerPost                  {width: 95%; border: .5em solid #dddbdb; transition: .5s; color: white; border-radius: 1em; margin-top: 1em; margin-bottom: 1em; padding-top: 1em; padding-bottom: 1em; display: grid; justify-items: center; align-items: center;}
                 .bodyContainerPostTitle             {font-size: 3.5em; width: 100%; border: none; background: #ebebeb2c; color: #fff; font-family: uno; text-align: center; }
                 .bodyContainerPostContent           {font-size: 2.5em; width: 100%; border: none; background: #ebebeb2c; color: #fff; font-family: dos; margin-top: .5em; text-align: center;}
-                .bodyContainerButtonSubmit           {height: 5em; width: 5em; margin-top: 1em; margin-right: 1em; cursor: pointer;}
+                .bodyContainerButtonSubmit           {height: 5em; width: 5em; margin-top: 1em; margin-right: 1em; background: none; border: none; cursor: pointer;}
                 .bodyContainerPostActions           {display: flex;}
 </style>
