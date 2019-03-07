@@ -7,13 +7,13 @@
         </div>
         <div class="bodyGrid">
             <div class="bodyContainer">
-                <form v-on:submit.prevent="crearUsuario">
+                <form v-on:submit.prevent="userSignUp">
                     <p class="bodyContainerTitle">Sign Up</p>
-                    <input type="text" v-model="nombre" class="bodyContainerInput" placeholder="nombre" v-validate="'required'" name="nombre"><br>
+                    <input type="text" v-model="usuario.nombre" class="bodyContainerInput" placeholder="nombre" v-validate="'required'" name="nombre"><br>
                     <span class="errors">{{ errors.first('nombre') }}</span><br>
-                    <input type="text" v-model="email" class="bodyContainerInput" placeholder="email" v-validate="'required|email'" name="email"><br>
+                    <input type="text" v-model="usuario.email" class="bodyContainerInput" placeholder="email" v-validate="'required|email'" name="email"><br>
                     <span class="errors">{{ errors.first('email') }}</span><br>
-                    <input type="password" v-model="password" class="bodyContainerInput" placeholder="password" v-validate="'required|alpha_num:3'" name="password"><br>
+                    <input type="password" v-model="usuario.password" class="bodyContainerInput" placeholder="password" v-validate="'required|alpha_num:3'" name="password"><br>
                     <span class="errors">{{ errors.first('password') }}</span><br>
                     <input type="file" @change="onFileSelected"><br>
                     <button type="submit" class="bodyContainerButtonSubmit"><img type='submit' src="../assets/icons/login.svg" class="bodyContainerButton"></button>
@@ -126,7 +126,7 @@ export default {
                     }
             })
         },
-        usuarioSignUp(){
+        userSignUp(){
             this.$validator.validateAll().then(res=>{
                 if (res){
                     const usuario = {
@@ -135,18 +135,7 @@ export default {
                         password:this.usuario.password,
                         fotoPerfil:this.usuario.fotoPerfil
                     }
-                    this.$store.dispatch('usuarioSignUp',usuario);
-                }else{
-                    const toast = this.$swal.mixin({
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000
-                    });
-                    toast({
-                    type: 'error',
-                    title: 'Verify Inputs'
-                    })                    
+                    this.$store.dispatch('userSignUp',usuario);
                 }
             })
         }

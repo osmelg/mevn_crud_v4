@@ -28,8 +28,6 @@
     </div>
 </template>
 <script>
-/* eslint-disable */
-import {mapActions} from 'vuex'
 export default {
   data () {
     return {
@@ -40,153 +38,15 @@ export default {
     }
   },
   methods:{
-    loginValidation() {
-        this.$validator.validateAll().then(res=>{ 
-            if(res) {
-                alert('Form successfully submitted!')
-            } else {
-                alert('Please correct all error!')
-            }
-        })
-    },
-    loginValidation(){
-        this.$validator.validateAll().then(res=>{
-            if(res) {
-                axios
-                .post('http://localhost:3000/login',{
-                    email:this.email,
-                    password:this.password
-                })
-                .then(response =>{
-                    if(response.data.rs === 'usuarioNoConfirmado'){
-                        const toast = this.$swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000
-                            });
-                            toast({
-                            type: 'success',
-                            title: 'User NOT Confirmed, check your email'
-                            })
-                    }else if(response.data.rs === 'usuarioLogeado'){
-                        const toast = this.$swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000
-                            });
-                            toast({
-                            type: 'success',
-                            title: 'Logged In'
-                            })
-                        localStorage.setItem('token',response.data.token);
-                        this.$router.push('/dashboard');
-                    }
-                })
-                .catch(error=>{
-                    if(error.response.data.rs === 'emailIncorrecto'){
-                        const toast = this.$swal.mixin({
-                        toast: true,
-                        position: 'top',
-                        showConfirmButton: false,
-                        timer: 3000
-                        });
-                        toast({
-                        type: 'error',
-                        title: 'Email Incorrect'
-                        })
-                    }else if (error.response.data.rs === 'errorIncriptacion'){
-                        const toast = this.$swal.mixin({
-                        toast: true,
-                        position: 'top',
-                        showConfirmButton: false,
-                        timer: 3000
-                        });
-                        toast({
-                        type: 'error',
-                        title: 'Encrypt Error'
-                        })
-                    }else if (error.response.data.rs === 'passwordIncorrecto'){
-                        const toast = this.$swal.mixin({
-                        toast: true,
-                        position: 'top',
-                        showConfirmButton: false,
-                        timer: 3000
-                        });
-                        toast({
-                        type: 'error',
-                        title: 'Password Incorrect'
-                        })
-                    }else if (error.response.data.rs === 'emailError'){
-                        const toast = this.$swal.mixin({
-                        toast: true,
-                        position: 'top',
-                        showConfirmButton: false,
-                        timer: 3000
-                        });
-                        toast({
-                        type: 'error',
-                        title: 'Verify Email input'
-                        })
-                    }else if (error.response.data.rs === 'passwordError'){
-                        const toast = this.$swal.mixin({
-                        toast: true,
-                        position: 'top',
-                        showConfirmButton: false,
-                        timer: 3000
-                        });
-                        toast({
-                        type: 'error',
-                        title: 'Verify Password input'
-                        })
-                    }else{
-                        const toast = this.$swal.mixin({
-                        toast: true,
-                        position: 'top',
-                        showConfirmButton: false,
-                        timer: 3000
-                        });
-                        toast({
-                        type: 'error',
-                        title: `Error,try again`
-                        })
-                    }
-                })                    
-            } else {
-                const toast = this.$swal.mixin({
-                toast: true,
-                position: 'top',
-                showConfirmButton: false,
-                timer: 3000
-                });
-                toast({
-                type: 'error',
-                title: 'Verify Inputs'
-                })
-            }
-        })
-    },
     userLogin(){
       this.$validator.validateAll().then(res=>{ 
-          if(res) {
+        if(res) {
             const usuario = {
               email:this.usuario.email,
               password:this.usuario.password
             }
             this.$store.dispatch('userLogin',usuario);
-          } else {
-            const toast = this.$swal.mixin({
-            toast: true,
-            position: 'top',
-            showConfirmButton: false,
-            timer: 3000
-            });
-            toast({
-            type: 'error',
-            title: 'Verify Inputs'
-            })
-          }
+        }
       })
     }
   }

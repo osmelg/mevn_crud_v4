@@ -16,23 +16,27 @@ export default {
         }
     },
     created(){
-        this.getData();
+        this.userConfirm();
     },
     methods:{
-        getData(){
-            axios.get('http://localhost:3000/confirm/'+this.$route.params.token) 
-                 .then(response =>{
-                    if (response.data.rs === 'usuarioConfirmado'){
-                        localStorage.setItem('token',response.data.token);
-                        this.$router.push('/dashboard');
-                    }
-                })
-                 .catch(error =>{
-                    alert('Error, please try again');
-                    this.$router.push('/home');
-                })
-            }
+        // getData(){
+        //     axios.get('http://localhost:3000/confirm/'+this.$route.params.token) 
+        //          .then(response =>{
+        //             if (response.data.rs === 'usuarioConfirmado'){
+        //                 localStorage.setItem('token',response.data.token);
+        //                 this.$router.push('/dashboard');
+        //             }
+        //         })
+        //          .catch(error =>{
+        //             alert('Error, please try again');
+        //             this.$router.push('/home');
+        //         })
+        //     }
+        // },
+        userConfirm(){
+            this.$store.dispatch('userConfirm');
         }
+    }
 }
 </script>
 <style scoped>

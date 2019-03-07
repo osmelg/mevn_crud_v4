@@ -19,7 +19,6 @@
     </div>
 </template>
 <script>
-import axios from 'axios';
 export default {
     data(){
         return{
@@ -28,7 +27,7 @@ export default {
     },
     methods:{
         userEmailForgot(){
-            emailTo:this.usuario.emailTo,
+            emailTo:this.emailTo,
             this.$store.dispatch('userEmailForgot',emailTo);
         }
     }

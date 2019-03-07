@@ -16,7 +16,8 @@ Vue.use(Router)
 let router = new Router({
   mode: 'history',
   routes: [
-    {path: '*', redirect:'/login'},
+    {path: '/', redirect:'/home'},
+    {path: '*', redirect:'/home'},
     {path: '/home',name: 'home',component: home},
     {path: '/dashboard',name: 'dashboard',component: dashboard,meta:{requiresAuth:true}},
     {path: '/dashboard/crearcomentario',name: 'crearcomentario',component: crearcomentario,meta:{requiresAuth:true}},
