@@ -10,7 +10,8 @@ Vue.use(Vuex,axios,Swal);
 
 export const store = new Vuex.Store({
     modules:{
-        user:user
+        user:user,
+        blog:blog
     },
     state:{
         // email:'',

@@ -20,8 +20,8 @@
             <div class="bodyMainPosts">
                 <div class="bodyContainerPost">
                     <form v-on:submit.prevent="postComentario">
-                        <input type="text" v-model="titulo" placeholder="titulo" class="bodyContainerPostTitle"><br>
-                        <input type="text" v-model="comentario" placeholder="comentario" class="bodyContainerPostContent"><br>
+                        <input type="text" v-model="blog.titulo" placeholder="titulo" class="bodyContainerPostTitle"><br>
+                        <input type="text" v-model="blog.comentario" placeholder="comentario" class="bodyContainerPostContent"><br>
                         <button type="submit" class="bodyContainerButtonSubmit"><img type='submit' src="../assets/icons/create.svg" class="bodyContainerButton"></button>
                     </form>
                 </div>                             
@@ -32,47 +32,24 @@
 </template>
 <script>
 /* eslint-disable */
-import axios from "axios";
-import router from "../router";
 import cerrarSesion from '../components/cerrarsesion.vue';
 export default {
     components:{'cerrarSesion':cerrarSesion},
     data(){
         return{
-            titulo:'',
-            comentario:''
+            blog:{
+                titulo:'',
+                comentario:''
+            }
         }
     },
     methods:{
-        postComentario(){
-            axios
-            .post('http://localhost:3000/dashboard/crearcomentario',
-            {
+        blogPost(){
+            const blog = {
                 titulo:this.titulo,
                 comentario:this.comentario
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                },                
-            })
-            .then(response =>{
-                if(response.data.rs === 'comentarioCreado'){
-                    this.$router.push('/dashboard');
-                }
-            })
-            .catch(error=>{
-                if(error.response.data.rs === 'errorCrearComentario'){
-                    alert('errorCrearComentario');
-                }
-                else if(error.response.data.rs === 'tokenExpired'){
-                    alert('tokenExpired');
-                    this.$router.push('/login');
-                    localStorage.removeItem('token');
-                }else{
-                    alert(error);
-                }
-            })
+            }
+            this.$store.dispatch('blogPost',blog);      
         }
     }
 }

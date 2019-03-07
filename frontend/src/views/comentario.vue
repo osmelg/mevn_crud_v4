@@ -45,65 +45,21 @@ export default {
     }
   },
   created(){
-    this.getcomentario();
+    this.blogView();
   },
   methods:{
-    getcomentario(){
-      axios
-      .get('http://localhost:3000/dashboard/comentario/'+this.$route.params.id,{
-              headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`
-              },
-          }) 
-      .then(response =>{
-        this.comentario = response.data;
-      })
-      .catch(error=>{
-        if(error.response.data.rs === 'getComentarioError'){
-          this.comentarioError = 'getComentarioError';
-        }        
-      })
+    blogView(){
+      this.$store.dispatch('blogView');
     },
-    putComentario(){
-      axios
-      .put('http://localhost:3000/dashboard/comentario/'+this.$route.params.id,this.comentario,
-        {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            },                
-        })
-      .then(response=>{
-        if(response.data.rs === 'comentarioActualizado'){
-          this.$router.push('/dashboard');
-        }
-      })
-      .catch(error=>{
-        if(error.response.data.rs === 'comentarioActualizadoError'){
-          alert('comentarioActualizadoError');
-        }
-      })
+    blogPut(){
+      const blog = {
+        titulo: this.comentario.titulo,
+        comentario:this.comentario.comentario
+      }
+      this.$store.dispatch('blogPut',blog);
     },
-    deletecomentario(id) {
-      axios
-        .delete("http://localhost:3000/dashboard/comentario/"+id,
-          {
-              headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`
-              },                
-          })
-        .then(response => {
-          if (response.data.rs === "comentarioEliminado") {
-            this.$router.push('/dashboard');
-          }
-        })
-        .catch(error=>{
-          if(error.response.data.rs === 'comentarioEliminadoError'){
-            this.comentariosError = 'comentarioEliminadoError';
-          }else if(error.response.data.rs === 'tokenExpired'){
-            this.$router.push('/login');
-            localStorage.removeItem('token');
-          }
-        })
+    blogDelete(id){
+      this.$store.dispatch('blogView',id);
     }
   }
 }

@@ -29,26 +29,12 @@ export default {
         }
     },
     created(){
-        this.getPerfilUsuario();
+        this.userProfile();
     },
     methods:{
-        getPerfilUsuario(){
-            axios
-            .get('http://localhost:3000/profile/'+this.$route.params.id,{
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
-                    },
-                }) 
-            .then(response =>{
-                this.usuario = response.data;
-            })
-            .catch(error=>{
-                if(error.response.data.rs === 'getComentarioError'){
-                // this.usuarioError = 'usuarioError';
-                // esto deberia ser con sweetalert
-                }        
-            })
-        }        
+        userProfile(){
+            this.$store.dispatch('userProfile');
+        }
     }
 }
 </script>

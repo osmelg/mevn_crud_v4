@@ -10,8 +10,8 @@
         <div class="bodyGrid">
             <div class="bodyContainer">   
                 <p class="bodyContainerTitle">Reset your password</p>
-                <form @submit.prevent="changePassword">
-                    <input type="password" class="bodyContainerInput" v-model="password" placeholder="Password">
+                <form @submit.prevent="userEmailResetPost">
+                    <input type="password" class="bodyContainerInput" v-model="usuario.password" placeholder="Password">
                     <button class="bodyContainerButtonSubmit">Change it</button>
                 </form>            
             </div>
@@ -24,47 +24,27 @@ import axios from 'axios';
 export default {
     data(){
         return{
-            password:'',
-            usuarioId:''
+            usuario:{
+                password:'',
+                usuarioId:''
+            }
         }
     },
     created(){
-        this.getData();
+        this.userEmailResetGet();
     },
     methods:{
-        getData(){
-            axios.get('http://localhost:3000/reset/'+this.$route.params.token) 
-                 .then(res =>{
-                     this.usuarioId = res.data.rs;
-                })
-                 .catch(error =>{
-                    const toast = this.$swal.mixin({
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000
-                    });
-                    toast({
-                    type: 'error',
-                    title: 'Error,try again'
-                    })                    
-                })
-            },
-        changePassword(){
-            axios
-                .post('http://localhost:3000/reset',{
-                    password:this.password,
-                    id:this.usuarioId
-                })
-                .then(response=>{
-                    localStorage.setItem('token',response.data.token);
-                    this.$router.push('/dashboard');
-                })
-                .catch(error=>{
-                    console.log(error);
-                })
+        userEmailResetGet(){
+            this.$store.dispatch('userEmailResetGet');
+        },
+        userEmailResetPost(){
+            const usuario = {
+                password: this.password,
+                usuarioId: this.usuarioId
             }
+            this.$store.dispatch('userEmailResetPost',usuario);
         }
+    }
 }
 </script>
 <style scoped>

@@ -15,7 +15,6 @@ export default{
         emailTo:'',
         usuarioId:'',
     },
-    getters: {},
     mutations: {
         USER_LOGIN(state,payload){
             state.email = payload.email;
@@ -26,16 +25,7 @@ export default{
             state.email = payload.email;
             state.password = payload.password;
             state.fotoPerfil = payload.fotoPerfil;
-        },
-        // USER_EMAIL_FORGOT(state,payload){
-        //     state.emailTo = payload;
-        // },
-        // USER_EMAIL_RESET_GET(state,payload){
-        //     state.usuarioId = payload;
-        //     // es necesario hacer una mutacion?
-        // },
-        // USER_EMAIL_RESET_POST(state,payload){
-        // }
+        }
     },
     actions: {
         userLogin({commit},payload) {
@@ -194,97 +184,91 @@ export default{
                     })
                     router.push('/home');
                 })
+        },
+        userForgot(payload) {
+            axios.post('http://localhost:3000/forgot',
+                {
+                    emailTo: payload,
+                })
+                .then(response => {
+                    if (response.data.rs === 'emailEnviado') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                          });
+                          Toast.fire({
+                            type: 'success',
+                            title: 'User not confirmed,check your email'
+                          })
+                    router.push('/home');
+                    } else if (response.data.rs === 'emailNoExiste') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                          });
+                          Toast.fire({
+                            type: 'success',
+                            title: 'Email doesnt exists'
+                          })
+                    }
+                })
+                .catch(error => {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                      });
+                      Toast.fire({
+                        type: 'success',
+                        title: `${error}`
+                      })                    
+                })
+        },
+        userEmailResetGet(){
+            axios.get('http://localhost:3000/reset/'+ router.currentRoute.params.token) 
+                 .then(res =>{
+                     this.usuarioId = res.data.rs;
+                })
+                 .catch(error =>{
+                     alert(error);
+                })            
+        },
+        userEmailResetPost(payload) {
+            const usuario = {
+                password: payload.password,
+                id:payload.usuarioId
+            }
+            axios
+                .post('http://localhost:3000/reset', {
+                    password: usuario.password,
+                    id: usuario.usuarioId
+                })
+                .then(response => {
+                    localStorage.setItem('token', response.data.token);
+                    router.push('/dashboard');
+                })
+                .catch(error => {
+                    alert(error);
+                })
+        },
+        userProfile(){
+            axios
+            .get('http://localhost:3000/profile/'+ router.currentRoute.params.id,{
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    },
+                }) 
+            .then(response =>{
+                this.usuario = response.data;
+            })
+            .catch(error=>{
+                alert(error);
+            })            
         }
-        // userEmailForgot({commit},payload) {
-        //     axios.post('http://localhost:3000/forgot',
-        //         {
-        //             emailTo: payload,
-        //         })
-        //         .then(response => {
-        //             if (response.data.rs === 'emailEnviado') {
-        //                 const Toast = Swal.mixin({
-        //                     toast: true,
-        //                     position: 'top-end',
-        //                     showConfirmButton: false,
-        //                     timer: 3000
-        //                   });
-        //                   Toast.fire({
-        //                     type: 'success',
-        //                     title: 'User not confirmed,check your email'
-        //                   })
-        //                 commit.commit('USER_EMAIL_FORGOT',emailTo);
-        //             $router.push('/home');
-        //             } else if (response.data.rs === 'emailNoExiste') {
-        //                 const Toast = Swal.mixin({
-        //                     toast: true,
-        //                     position: 'top-end',
-        //                     showConfirmButton: false,
-        //                     timer: 3000
-        //                   });
-        //                   Toast.fire({
-        //                     type: 'success',
-        //                     title: 'Email doesnt exists'
-        //                   })
-        //             }
-        //         })
-        //         .catch(error => {
-        //             const Toast = Swal.mixin({
-        //                 toast: true,
-        //                 position: 'top-end',
-        //                 showConfirmButton: false,
-        //                 timer: 3000
-        //               });
-        //               Toast.fire({
-        //                 type: 'success',
-        //                 title: `${error}`
-        //               })                    
-        //         })
-        // },
-        // userEmailResetGet({commit},payload){
-        //     axios.get('http://localhost:3000/reset/'+this.$route.params.token) 
-        //          .then(res =>{
-        //              this.usuarioId = res.data.rs;
-        //              commit.commit('USER_EMAIL_RESET_GET',payload);
-        //         })
-        //          .catch(error =>{
-        //             const Toast = Swal.mixin({
-        //                 toast: true,
-        //                 position: 'top-end',
-        //                 showConfirmButton: false,
-        //                 timer: 3000
-        //               });
-        //               Toast.fire({
-        //                 type: 'error',
-        //                 title: `Error,try again ${error}`
-        //               })                    
-        //         })            
-        // },
-        // userEmailResetPost({ commit }, payload) {
-        //     axios
-        //         .post('http://localhost:3000/reset', {
-        //             password: this.password,
-        //             id: this.usuarioId
-        //         })
-        //         .then(response => {
-        //             commit.commit('USER_EMAIL_RESET_POST',usuario);
-        //             localStorage.setItem('token', response.data.token);
-        //             router.push('/dashboard');
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //         })
-        // }
     }
 }
-// this.$store.dispatch('userLogin',usuario);
-// commit.commit('USER_LOGIN',usuario);
-// const Toast = Swal.mixin({
-//     toast: true,
-//     position: 'top-end',
-//     showConfirmButton: false,
-//     timer: 3000
-//   });
-//   Toast.fire({
-//     type: 'success',
-//     title: 'Logged In'
-//   })
