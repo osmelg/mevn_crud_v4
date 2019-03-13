@@ -20,10 +20,10 @@
               <div class="bodyMainPosts">
                   <div class="bodyContainerPost">
                       <form v-on:submit.prevent="putComentario">
-                          <input type="text" v-model="comentario.titulo" placeholder="titulo" class="bodyContainerPostTitle"><br>
-                          <input type="text" v-model="comentario.comentario" placeholder="comentario" class="bodyContainerPostContent"><br>
+                          <input type="text" :value="$store.state.blog.blog.titulo" placeholder="titulo" class="bodyContainerPostTitle"><br>
+                          <input type="text" v-model="$store.state.blog.blog.comentario" placeholder="comentario" class="bodyContainerPostContent"><br>
                           <button type="submit" class="bodyContainerButtonSubmit"><img type='submit' src="../assets/icons/update.svg" class="bodyContainerButton"></button>
-                          <button class="bodyContainerButtonSubmit" v-on:click.prevent="deletecomentario(comentario._id)"><img type='submit' src="../assets/icons/delete.svg" class="bodyContainerButton"></button>
+                          <button class="bodyContainerButtonSubmit" v-on:click.prevent="blogDelete($store.state.blog.blog._id)"><img type='submit' src="../assets/icons/delete.svg" class="bodyContainerButton"></button>
                       </form>
                   </div>                             
               </div>
@@ -32,25 +32,13 @@
     </div>
 </template>
 <script>
-/* eslint-disable */
-import axios from "axios";
-import router from "../router";
 import cerrarsesion from '../components/cerrarsesion.vue';
 export default {
   components:{'cerrarsesion':cerrarsesion},
-  data(){
-    return{
-      comentario:{},
-      comentarioError:''
-    }
-  },
   created(){
-    this.blogView();
+    this.$store.dispatch('blogView');
   },
   methods:{
-    blogView(){
-      this.$store.dispatch('blogView');
-    },
     blogPut(){
       const blog = {
         titulo: this.comentario.titulo,
@@ -59,7 +47,7 @@ export default {
       this.$store.dispatch('blogPut',blog);
     },
     blogDelete(id){
-      this.$store.dispatch('blogView',id);
+      this.$store.dispatch('blogDelete',id);
     }
   }
 }

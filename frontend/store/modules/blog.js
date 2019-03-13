@@ -8,9 +8,16 @@ Vue.use(Vuex,axios,Swal,router);
 
 export default{
     state:{
+        blogs:{},
+        blog:{}
     },
     mutations:{
-
+        BLOGS_VIEW(state,payload){
+            state.blogs = payload;
+        },
+        BLOG_VIEW(state,payload){
+            state.blog = payload;
+        }
     },
     actions:{
         blogPost(payload){
@@ -38,7 +45,7 @@ export default{
                 alert(error);
             })            
         },
-        blogView(){
+        blogView({commit},blog){
             axios
             .get('http://localhost:3000/dashboard/comentario/'+ router.currentRoute.params.id,{
                     headers: {
@@ -46,7 +53,8 @@ export default{
                     },
                 }) 
             .then(response =>{
-              this.comentario = response.data;
+                let blog = response.data;
+                commit('BLOG_VIEW',blog)
             })
             .catch(error=>{
                 alert(error);
@@ -74,8 +82,9 @@ export default{
             })            
         },
         blogDelete(payload){
+            const id = payload.state.blog._id;
             axios
-            .delete("http://localhost:3000/dashboard/comentario/"+payload,
+            .delete("http://localhost:3000/dashboard/comentario/"+id,
               {
                   headers: {
                       Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -90,13 +99,13 @@ export default{
               if(error.response.data.rs === 'comentarioEliminadoError'){
                 this.comentariosError = 'comentarioEliminadoError';
               }else if(error.response.data.rs === 'tokenExpired'){
-                  alert('Session Expired');
+                alert('Session Expired');
                 router.push('/login');
                 localStorage.removeItem('token');
               }
             })            
         },
-        blogsView(payload){
+        blogsView({commit},blogs){
             axios
             .get('http://localhost:3000/dashboard',{
                     headers: {
@@ -104,7 +113,8 @@ export default{
                     },
                 })     
             .then(response =>{
-                this.comentarios = response.data;
+                let blogs = response.data;
+                commit('BLOGS_VIEW',blogs)
             })
             .catch(error =>{
                 if(error.response.data.rs === 'tokenExpired'){

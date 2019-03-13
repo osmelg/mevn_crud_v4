@@ -1,31 +1,19 @@
 <template>
     <div class="comentariosGrid">
-        <div class="bodyMainPosts" v-for="comentario of comentarios" :key="comentario._id">
-            <p class="bodyContainerPostTitle">{{comentario.titulo}}</p>
-            <p class="bodyContainerPostContent">{{comentario.comentario}}</p>
-            <router-link :to="{name:'comentario',params:{id:comentario._id}}">
+        <div class="bodyMainPosts" v-for="blog of $store.state.blog.blogs" :key="blog._id">
+            <p class="bodyContainerPostTitle">{{blog.titulo}}</p>
+            <p class="bodyContainerPostContent">{{blog.comentario}}</p>
+            <router-link :to="{name:'comentario',params:{id:blog._id}}">
                 <img type='submit' src="../assets/icons/update.svg" class="bodyMainPostsButton">
             </router-link>
-        </div>        
+        </div>
     </div>
 </template>
 <script>
-import axios from "axios";
 export default {
-    data(){
-        return{
-            comentarios:[],
-            comentariosError:''
-        }
-    },
     created(){
-        this.blogsView();
+        this.$store.dispatch('blogsView');
     },
-    methods:{
-        blogsView(){
-            this.$store.dispatch('blogsView',blogs);
-        }
-    }
 }
 </script>
 <style scoped>

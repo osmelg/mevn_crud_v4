@@ -14,6 +14,7 @@ export default{
         fotoPerfil:null,
         emailTo:'',
         usuarioId:'',
+        datosDeUsuario:''
     },
     mutations: {
         USER_LOGIN(state,payload){
@@ -25,6 +26,9 @@ export default{
             state.email = payload.email;
             state.password = payload.password;
             state.fotoPerfil = payload.fotoPerfil;
+        },
+        USER_PROFILE(state,datosDeUsuario){
+            state.datosDeUsuario = datosDeUsuario;
         }
     },
     actions: {
@@ -256,7 +260,7 @@ export default{
                     alert(error);
                 })
         },
-        userProfile(){
+        userProfile({commit}){
             axios
             .get('http://localhost:3000/profile/'+ router.currentRoute.params.id,{
                     headers: {
@@ -264,11 +268,12 @@ export default{
                     },
                 }) 
             .then(response =>{
-                this.usuario = response.data;
+                let datosDeUsuario = response.data;
+                commit('USER_PROFILE',datosDeUsuario);
             })
             .catch(error=>{
                 alert(error);
             })            
-        }
+        },
     }
 }

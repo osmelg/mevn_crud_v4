@@ -12,30 +12,19 @@
         </div>
         <div class="bodyGrid">
             <div class="bodyContainer">
-                <img :src="'http://localhost:3000/'+usuario.fotoPerfil" class="bodyContainerImage">
-                <span class="bodyContainerName">{{usuario.nombre}}</span>
+                <img :src="'http://localhost:3000/'+ $store.state.user.datosDeUsuario.fotoPerfil" class="bodyContainerImage">
+                <span class="bodyContainerName">{{$store.state.user.datosDeUsuario.nombre}}</span>
             </div>
         </div>
     </div>
 </template>
 <script>
-import axios from "axios";
 import cerrarsesion from '../components/cerrarsesion.vue';
 export default {
     components:{'cerrarSesion':cerrarsesion},
-    data(){
-        return{
-            usuario:{}
-        }
-    },
     created(){
-        this.userProfile();
-    },
-    methods:{
-        userProfile(){
-            this.$store.dispatch('userProfile');
-        }
-    }
+        this.$store.dispatch('userProfile');
+    }	
 }
 </script>
 <style scoped>
