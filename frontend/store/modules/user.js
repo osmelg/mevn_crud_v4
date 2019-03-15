@@ -14,7 +14,7 @@ export default{
         fotoPerfil:null,
         emailTo:'',
         usuarioId:'',
-        datosDeUsuario:''
+        datosDeUsuario:{}
     },
     mutations: {
         USER_LOGIN(state,payload){

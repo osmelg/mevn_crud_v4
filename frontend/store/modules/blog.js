@@ -3,9 +3,7 @@ import Vuex from 'vuex';
 import axios from 'axios';
 import router from '../../src/router';
 import Swal from 'sweetalert2';
-
 Vue.use(Vuex,axios,Swal,router);
-
 export default{
     state:{
         blogs:{},
@@ -16,6 +14,9 @@ export default{
             state.blogs = payload;
         },
         BLOG_VIEW(state,payload){
+            state.blog = payload;
+        },
+        BLOG_UPDATE(state,payload){
             state.blog = payload;
         }
     },
@@ -45,7 +46,7 @@ export default{
                 alert(error);
             })            
         },
-        blogView({commit},blog){
+        blogView({commit}){
             axios
             .get('http://localhost:3000/dashboard/comentario/'+ router.currentRoute.params.id,{
                     headers: {
@@ -60,21 +61,22 @@ export default{
                 alert(error);
             })            
         },
-        blogPut(payload){
-            const blog = {
-                titulo: payload.comentario.titulo,
-                comentario:payload.comentario.comentario
+        blogPut({commit},payload){
+            const blodUpdated = {
+                titulo: payload.titulo,
+                comentario:payload.comentario
               }            
             axios
             .put('http://localhost:3000/dashboard/comentario/'+ router.currentRoute.params.id,
-              {titulo:blog.titulo,comentario:blog.comentario},{
+              {titulo:blodUpdated.titulo,comentario:blodUpdated.comentario},{
                   headers: {
                       Authorization: `Bearer ${localStorage.getItem('token')}`
                   },                
               })
             .then(response=>{
               if(response.data.rs === 'comentarioActualizado'){
-                router.push('/dashboard');
+                    commit('BLOG_UPDATE',blodUpdated)
+                    router.push('/dashboard');
               }
             })
             .catch(error=>{
@@ -105,7 +107,7 @@ export default{
               }
             })            
         },
-        blogsView({commit},blogs){
+        blogsView({commit}){
             axios
             .get('http://localhost:3000/dashboard',{
                     headers: {

@@ -19,9 +19,10 @@
             <div class="bodyContainer">
               <div class="bodyMainPosts">
                   <div class="bodyContainerPost">
-                      <form v-on:submit.prevent="putComentario">
-                          <input type="text" :value="$store.state.blog.blog.titulo" placeholder="titulo" class="bodyContainerPostTitle"><br>
-                          <input type="text" v-model="$store.state.blog.blog.comentario" placeholder="comentario" class="bodyContainerPostContent"><br>
+                      <form v-on:submit.prevent="blogPut">
+                          <!-- <input type="text" :value="$store.state.blog.blog.titulo" placeholder="titulo" class="bodyContainerPostTitle"><br> -->
+                          <input type="text" v-model="blog.titulo" placeholder="titulo" class="bodyContainerPostTitle"><br>
+                          <input type="text" v-model="blog.comentario" placeholder="comentario" class="bodyContainerPostContent"><br>
                           <button type="submit" class="bodyContainerButtonSubmit"><img type='submit' src="../assets/icons/update.svg" class="bodyContainerButton"></button>
                           <button class="bodyContainerButtonSubmit" v-on:click.prevent="blogDelete($store.state.blog.blog._id)"><img type='submit' src="../assets/icons/delete.svg" class="bodyContainerButton"></button>
                       </form>
@@ -32,24 +33,36 @@
     </div>
 </template>
 <script>
+import {mapState} from 'vuex';
 import cerrarsesion from '../components/cerrarsesion.vue';
 export default {
-  components:{'cerrarsesion':cerrarsesion},
-  created(){
-    this.$store.dispatch('blogView');
-  },
-  methods:{
-    blogPut(){
-      const blog = {
-        titulo: this.comentario.titulo,
-        comentario:this.comentario.comentario
-      }
-      this.$store.dispatch('blogPut',blog);
+    components:{'cerrarsesion':cerrarsesion},
+    data(){
+        return{
+            // blog:{
+            //     titulo:'',
+            //     comentario:''
+            // }
+        }
     },
-    blogDelete(id){
-      this.$store.dispatch('blogDelete',id);
-    }
-  }
+    created(){
+        this.$store.dispatch('blogView');
+    },
+    methods:{
+        blogPut(){
+            const blogUpdated = {
+                titulo: this.blog.titulo,
+                comentario:this.blog.comentario
+            }
+        this.$store.dispatch('blogPut',blogUpdated);
+        },
+        blogDelete(id){
+            this.$store.dispatch('blogDelete',id);
+        }
+    },
+    computed: mapState({
+        blog: ({blog}) => blog.blog
+    })
 }
 </script>
 <style scoped>

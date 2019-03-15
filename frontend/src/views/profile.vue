@@ -12,19 +12,23 @@
         </div>
         <div class="bodyGrid">
             <div class="bodyContainer">
-                <img :src="'http://localhost:3000/'+ $store.state.user.datosDeUsuario.fotoPerfil" class="bodyContainerImage">
-                <span class="bodyContainerName">{{$store.state.user.datosDeUsuario.nombre}}</span>
+                <img :src="'http://localhost:3000/'+ datosDeUsuario.fotoPerfil" class="bodyContainerImage">
+                <span class="bodyContainerName">{{datosDeUsuario.nombre}}</span>
             </div>
         </div>
     </div>
 </template>
 <script>
+import {mapState} from 'vuex';
 import cerrarsesion from '../components/cerrarsesion.vue';
 export default {
     components:{'cerrarSesion':cerrarsesion},
     created(){
         this.$store.dispatch('userProfile');
-    }	
+    },
+    computed: mapState({
+        datosDeUsuario: ({user}) => user.datosDeUsuario
+    })
 }
 </script>
 <style scoped>
