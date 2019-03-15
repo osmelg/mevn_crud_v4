@@ -17,27 +17,26 @@
         </div>
         <div class="bodyGrid">
             <div class="bodyContainer">
-            <div class="bodyMainPosts">
-                <div class="bodyContainerPost">
-                    <form v-on:submit.prevent="postComentario">
-                        <input type="text" v-model="blog.titulo" placeholder="titulo" class="bodyContainerPostTitle"><br>
-                        <input type="text" v-model="blog.comentario" placeholder="comentario" class="bodyContainerPostContent"><br>
-                        <button type="submit" class="bodyContainerButtonSubmit"><img type='submit' src="../assets/icons/create.svg" class="bodyContainerButton"></button>
-                    </form>
-                </div>                             
-            </div>
+                <div class="bodyMainPosts">
+                    <div class="bodyContainerPost">
+                        <form v-on:submit.prevent="blogPost">
+                            <input type="text" v-model="newBlog.titulo" placeholder="titulo" class="bodyContainerPostTitle"><br>
+                            <input type="text" v-model="newBlog.comentario" placeholder="comentario" class="bodyContainerPostContent"><br>
+                            <button type="submit" class="bodyContainerButtonSubmit"><img type='submit' src="../assets/icons/create.svg" class="bodyContainerButton"></button>
+                        </form>
+                    </div>                             
+                </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-/* eslint-disable */
 import cerrarSesion from '../components/cerrarsesion.vue';
 export default {
     components:{'cerrarSesion':cerrarSesion},
     data(){
         return{
-            blog:{
+            newBlog:{
                 titulo:'',
                 comentario:''
             }
@@ -45,11 +44,11 @@ export default {
     },
     methods:{
         blogPost(){
-            const blog = {
-                titulo:this.titulo,
-                comentario:this.comentario
+            const newBlog = {
+                titulo:this.newBlog.titulo,
+                comentario:this.newBlog.comentario
             }
-            this.$store.dispatch('blogPost',blog);      
+            this.$store.dispatch('blogPost',newBlog);      
         }
     }
 }

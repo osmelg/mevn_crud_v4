@@ -22,15 +22,15 @@ export default{
     },
     actions:{
         blogPost(payload){
-            const blog = {
+            const newBlog = {
                 titulo:payload.titulo,
                 comentario:payload.comentario
             }
             axios
             .post('http://localhost:3000/dashboard/crearcomentario',
             {
-                titulo:blog.titulo,
-                comentario:blog.comentario
+                titulo:newBlog.titulo,
+                comentario:newBlog.comentario
             },
             {
                 headers: {

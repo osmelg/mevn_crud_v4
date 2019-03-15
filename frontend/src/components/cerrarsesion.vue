@@ -19,7 +19,7 @@ export default {
             });
             toast({
             type: 'info',
-            title: 'Vuelva Pronto'
+            title: 'Come Back Soon'
             })
             this.$router.push('/login');
             localStorage.removeItem('token');
