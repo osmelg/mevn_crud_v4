@@ -19,7 +19,6 @@
     </div>
 </template>
 <script>
-/* eslint-disable */
 import axios from 'axios';
 export default {
     data(){
@@ -39,8 +38,8 @@ export default {
         },
         userEmailResetPost(){
             const usuario = {
-                password: this.password,
-                usuarioId: this.usuarioId
+                password: this.usuario.password,
+                usuarioId: this.$store.state.user.usuarioId
             }
             this.$store.dispatch('userEmailResetPost',usuario);
         }

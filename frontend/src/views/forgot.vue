@@ -11,7 +11,7 @@
             <div class="bodyContainer">   
                 <p class="bodyContainerTitle">¿Forgot your password?</p>
                 <form @submit.prevent="userForgot">
-                    <input type="text" class="bodyContainerInput" v-model="emailTo" placeholder="Type your email">
+                    <input type="text" class="bodyContainerInput" v-model="usuario.emailTo" placeholder="Type your email">
                     <button class="bodyContainerButtonSubmit">Send</button>
                 </form>            
             </div>
@@ -22,13 +22,15 @@
 export default {
     data(){
         return{
-            emailTo:''
+            usuario:{
+                emailTo:''
+            }
         }
     },
     methods:{
         userForgot(){
-            emailTo:this.emailTo
-            this.$store.dispatch('userForgot',emailTo);
+            var usuario = {emailTo:this.usuario.emailTo}
+            this.$store.dispatch('userForgot',usuario);
         }
     }
 }

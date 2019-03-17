@@ -12,9 +12,9 @@ export default{
         email:'',
         password:'',
         fotoPerfil:null,
-        emailTo:'',
         usuarioId:'',
-        datosDeUsuario:{}
+        datosDeUsuario:{},
+        emailTo:''
     },
     mutations: {
         USER_LOGIN(state,payload){
@@ -29,6 +29,9 @@ export default{
         },
         USER_PROFILE(state,datosDeUsuario){
             state.datosDeUsuario = datosDeUsuario;
+        },
+        USER_EMAIL_RESET(state,payload){
+            state.usuarioId = payload;
         }
     },
     actions: {
@@ -189,10 +192,13 @@ export default{
                     router.push('/home');
                 })
         },
-        userForgot(payload) {
+        userForgot({commit},payload) {
+            const usuario = {
+                emailTo:payload.emailTo
+            }
             axios.post('http://localhost:3000/forgot',
                 {
-                    emailTo: payload,
+                    emailTo: usuario.emailTo
                 })
                 .then(response => {
                     if (response.data.rs === 'emailEnviado') {
@@ -231,18 +237,19 @@ export default{
                         type: 'success',
                         title: `${error}`
                       })                    
-                })
+                })            
         },
-        userEmailResetGet(){
+        userEmailResetGet({commit}){
             axios.get('http://localhost:3000/reset/'+ router.currentRoute.params.token) 
                  .then(res =>{
                      this.usuarioId = res.data.rs;
+                     commit('USER_EMAIL_RESET',this.usuarioId)
                 })
                  .catch(error =>{
                      alert(error);
                 })            
         },
-        userEmailResetPost(payload) {
+        userEmailResetPost({commit},payload) {
             const usuario = {
                 password: payload.password,
                 id:payload.usuarioId
@@ -250,7 +257,7 @@ export default{
             axios
                 .post('http://localhost:3000/reset', {
                     password: usuario.password,
-                    id: usuario.usuarioId
+                    id: usuario.id
                 })
                 .then(response => {
                     localStorage.setItem('token', response.data.token);

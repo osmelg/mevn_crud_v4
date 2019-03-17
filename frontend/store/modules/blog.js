@@ -21,7 +21,7 @@ export default{
         }
     },
     actions:{
-        blogPost(payload){
+        blogPost({commit},payload){
             const newBlog = {
                 titulo:payload.titulo,
                 comentario:payload.comentario
